@@ -1,21 +1,36 @@
-from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+
+from django.utils import timezone
+
+from django.core.exceptions import PermissionDenied
+
 from django.db.models import CharField
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from .managers import UserManager
 
 
-class User(AbstractUser):
-    """Default user for ats.
-    """
+class User(AbstractBaseUser, PermissionsMixin):
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    email = models.EmailField(_('email address'), unique=True)
+    is_staff = models.BooleanField(
+        _('staff status'),
+        default=False,
+        help_text=_('Designates whether the user can log into this admin site.'),
+    )
+    is_active = models.BooleanField(
+        _('active'),
+        default=True,
+        help_text=_(
+            'Designates whether this user should be treated as active. '
+            'Unselect this instead of deleting accounts.'
+        ),
+    )
+    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
-    #: First and last name do not cover name patterns around the globe
-    name = CharField(_("Name of User"), blank=True, max_length=255)
+    objects = UserManager()
 
-    def get_absolute_url(self):
-        """Get url for user's detail view.
-
-        Returns:
-            str: URL for user detail.
-
-        """
-        return reverse("users:detail", kwargs={"username": self.username})
+    USERNAME_FIELD = 'email'
+    # REQUIRED_FIELDS = ['email']

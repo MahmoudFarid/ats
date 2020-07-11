@@ -1,15 +1,16 @@
 from django.contrib import admin
-from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-User = get_user_model()
+from .models import Company, CompanyAdmin
+
+admin.site.register(Company)
 
 
-@admin.register(User)
-class UserAdmin(AuthUserAdmin):
+@admin.register(CompanyAdmin)
+class CompanyUserAdmin(AuthUserAdmin):
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'password', 'company')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
@@ -18,7 +19,7 @@ class UserAdmin(AuthUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2'),
+            'fields': ('email', 'password1', 'password2', 'company'),
         }),
     )
     ordering = ('email',)
