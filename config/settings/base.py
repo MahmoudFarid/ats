@@ -77,7 +77,7 @@ LOCAL_APPS = [
     "ats.users.apps.UsersConfig",
     "ats.companies",
     "ats.ats_jobs",
-    # "ats.job_applications",
+    "ats.job_application",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
