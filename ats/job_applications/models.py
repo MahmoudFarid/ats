@@ -18,6 +18,9 @@ class JobApplications(models.Model):
     cv_url = models.URLField(null=True, blank=True)
     cv_file = models.FileField(upload_to='job_applications/cv/%Y/%m/%d/')
 
+    def __str__(instance):
+        return "{}-{}".format(instance.user.first_name, instance.user.last_name)
+
     class Meta:
         verbose_name = "Job Application"
         verbose_name_plural = "Job Applications"
