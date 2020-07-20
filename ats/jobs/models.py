@@ -1,4 +1,6 @@
 from django.db import models
+from model_utils import Choices
+from django.utils.translation import ugettext_lazy as _
 
 
 class Category(models.Model):
@@ -14,13 +16,18 @@ class Category(models.Model):
 
 
 class Job(models.Model):
-    class Status(models.IntegerChoices):
-        DRAFT = 1
-        ACTIVE = 2
+    STATUS = Choices(
+        (1, 'DRAFT', _('Draft')),
+        (2, 'ACTIVE', _('Active')),
+        (3, 'SHORT_LISTED', _('Short Listed')),
+        (4, 'REJECTED', _('Rejected')),
+        (5, 'ARCHIVED', _('Archived'))
+    )
+
     title = models.CharField(max_length=100)
     description = models.TextField()
     tags = models.TextField()
-    status = models.IntegerField(Status.choices)
+    status = models.IntegerField(choices=STATUS, default=STATUS.DRAFT)
     company = models.ForeignKey('companies.Company', null=False, blank=False, on_delete=models.CASCADE, related_name='company')
     category = models.ForeignKey('Category', null=False, blank=False, on_delete=models.CASCADE, related_name='category')
 
