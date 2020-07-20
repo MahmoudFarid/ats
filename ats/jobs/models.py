@@ -1,5 +1,4 @@
 from django.db import models
-from ats.companies.models import Company, CompanyAdmin
 
 
 class Category(models.Model):
