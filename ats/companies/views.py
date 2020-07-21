@@ -9,14 +9,17 @@ from rest_framework.request import Request
 from rest_framework.viewsets import ModelViewSet
 from .models import Company
 from .serialziers import CompanySerializer
+from .permissions import IsCompanyStaffPermission
 
 
 class CompaniesViewSet(ModelViewSet):
-    permission_classes = [AllowAny]
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+    permission_classes = [IsAuthenticated, IsCompanyStaffPermission]
 
-    def get_queryset(self):
-        queryset = Company.objects.all()
-        return queryset
+    # def get_queryset(self):
+    #     queryset = Company.objects.all()
+    #     return queryset
 
-    def get_serializer_class(self):
-        return CompanySerializer
+    # def get_serializer_class(self):
+    #     return serializer_class
