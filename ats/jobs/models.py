@@ -30,3 +30,6 @@ class Job(models.Model):
 
     def __str__(self):
         return "{}-{}".format(self.title, self.get_status_display())
+
+    def show_description(self):
+        return "{} ...".format(self.description[:15])
