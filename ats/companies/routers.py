@@ -11,4 +11,6 @@ router = SimpleRouter()
 router.register('', CompaniesViewSet, basename='companies')
 
 
-urlpatterns = [] + router.urls
+urlpatterns = [
+
+] + router.urls

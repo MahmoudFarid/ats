@@ -4,7 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from .models import Company, CompanyAdmin
 
-admin.site.register(Company)
+
+@admin.register(Company)
+class CompnayAdmin(admin.ModelAdmin):
+    list_display = ('name', 'website')
 
 
 @admin.register(CompanyAdmin)
