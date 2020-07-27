@@ -1,5 +1,6 @@
 from django.db import models
-from ats.companies.models import Company, CompanyAdmin
+from model_utils import Choices
+from django.utils.translation import ugettext_lazy as _
 
 
 class Category(models.Model):
@@ -15,20 +16,17 @@ class Category(models.Model):
 
 
 class Job(models.Model):
-    class Status(models.IntegerChoices):
-        DRAFT = 1
-        ACTIVE = 2
+    STATUS = Choices(
+        (1, 'DRAFT', _('Draft')),
+        (2, 'ACTIVE', _('Active'))
+    )
+
     title = models.CharField(max_length=100)
     description = models.TextField()
     tags = models.TextField()
-    status = models.IntegerField(Status.choices)
-    company = models.ForeignKey('companies.Company', null=False, blank=False, on_delete=models.CASCADE, related_name='company')
-    category = models.ForeignKey('Category', null=False, blank=False, on_delete=models.CASCADE, related_name='category')
+    status = models.IntegerField(choices=STATUS, default=STATUS.DRAFT)
+    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='company')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='category')
 
     def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = "Job"
-
-
+        return "{}-{}".format(self.title, self.get_status_display())

@@ -76,8 +76,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "ats.users.apps.UsersConfig",
     "ats.companies",
-    "ats.jobs.apps.JobsConfig",
-    "ats.job_applications.apps.JobApplicationsConfig",
+    "ats.jobs",
+    "ats.job_applications",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

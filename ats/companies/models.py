@@ -19,4 +19,4 @@ class Company(models.Model):
         verbose_name_plural = "Companies"
 
     def __str__(self):
-        return "{}-{}".format(self.name, self.description)
+        return self.name
