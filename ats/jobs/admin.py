@@ -28,12 +28,12 @@ class JobAdmin(admin.ModelAdmin):
     list_display_links = ('company', 'category')
     list_filter = (
         ('company', admin.RelatedOnlyFieldListFilter),
+        ('category', admin.RelatedOnlyFieldListFilter),
         ('status', admin.ChoicesFieldListFilter),
-        'category__name',
     )
-    sortable_by = ('id')
-    list_select_related = ('company', 'category')
-    list_per_page = 3
-    radio_fields = {"status": admin.VERTICAL}
-
     actions = [make_active, make_draft]
+    list_select_related = ('company', 'category')
+    radio_fields = {"status": admin.VERTICAL}
+    sortable_by = ('id')
+    list_per_page = 1
+
