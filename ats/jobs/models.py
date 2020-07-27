@@ -29,4 +29,4 @@ class Job(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='category')
 
     def __str__(self):
-        return self.title
+        return "{}-{}".format(self.title, self.get_status_display())
