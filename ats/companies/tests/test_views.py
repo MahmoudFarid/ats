@@ -90,3 +90,20 @@ class TestCompanyAPIViewSet(APITestCase):
         company = Company.objects.get(id=company.id)
 
         self.assertEqual(company.name, 'Nana')
+
+    def test_delete_company_with_staff(self):
+        response = self.staff_client.post(
+            self.main_api,
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        company = Company.objects.last()
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Company.objects.count(), 1)
+
+        response = self.staff_client.delete(
+            '{}{}'.format(self.main_api, company.id),
+            content_type='application/json'
+        )
+        self.assertEqual(Company.objects.count(), 0)
