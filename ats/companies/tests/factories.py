@@ -18,7 +18,7 @@ class CompanyFactory(factory.DjangoModelFactory):
     email = factory.Faker("email")
     website = factory.Sequence(lambda n: "http://comapany_%s.com" % n)
     avatar = factory.Faker('file_path')
-    created_by = factory.SubFactory(CompanyStaffFactory, email=factory.SelfAttribute('..email'))
+    created_by = factory.SubFactory(CompanyStaffFactory)
 
     class Meta:
         model = Company

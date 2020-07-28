@@ -30,6 +30,6 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        return super().save()
+        return super().save(*args, **kwargs)

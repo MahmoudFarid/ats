@@ -5,6 +5,7 @@ from rest_framework.authtoken.models import Token
 
 from ats.companies.models import CompanyAdmin, CompanyStaff, Company
 from ats.users.models import User
+from .factories import CompanyFactory
 
 
 class TestCompanyAPIViewSet(APITestCase):
@@ -23,12 +24,12 @@ class TestCompanyAPIViewSet(APITestCase):
         self.unauthorized_client = APIClient()
 
         self.main_api = '/api/companies/'
+        self.obj_api = '/api/companies/{}/'
 
         self.data = {
-            "created_by": self.staff.id,
-            "name": "Company",
+            "name": "test",
             "description": "Description",
-            "email": "email@email.com",
+            "email": "email@company.com",
             "website": "https://test.com"
         }
 
@@ -43,10 +44,10 @@ class TestCompanyAPIViewSet(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Company.objects.count(), 1)
         company = Company.objects.last()
-        #TODO: continue with checking
+        # #TODO: continue with checking response
         self.assertEqual(company.created_by, self.staff)
 
-    def test_create_company_unauthorized_client(self):
+    def test_create_company_with_unauthorized_client(self):
         self.assertEqual(Company.objects.count(), 0)
 
         response = self.unauthorized_client.post(
@@ -69,3 +70,89 @@ class TestCompanyAPIViewSet(APITestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Company.objects.count(), 0)
         company = Company.objects.last()
+
+    def test_create_company_with_empty_data(self):
+        response = self.staff_client.post(
+            self.main_api,
+            data=json.dumps({}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+        # import ipdb ; ipdb.set_trace()
+
+    def test_create_company_with_same_data_twice(self):
+        pass
+
+    def test_update_company_with_staff(self):
+        company = CompanyFactory(created_by=self.staff)
+        response = self.staff_client.put(
+            self.obj_api.format(company.id),
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+        response = response.json()
+        self.assertEqual(response.get('name'), self.data.get('name'))
+
+    def test_update_company_with_unauthorized_client(self):
+        pass
+
+    def test_update_company_with_client(self):
+        pass
+
+    def test_update_another_company_information(self):
+        company = CompanyFactory()
+        response = self.staff_client.put(
+            self.obj_api.format(company.id),
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_partial_update_company_with_staff(self):
+        pass
+
+    def test_partial_update_company_with_unauthorized_client(self):
+        pass
+
+    def test_partial_update_company_with_client(self):
+        pass
+
+    def test_partial_update_another_company_information(self):
+        pass
+
+    def test_list_companies_with_client(self):
+        CompanyFactory.create_batch(5)
+
+        response = self.client.get(
+            self.main_api
+        )
+        self.assertEqual(response.status_code, 200)
+        response = response.json()
+        self.assertEqual(response.get('count'), 5)
+
+    def test_list_companies_with_unauthorized_client(self):
+        pass
+
+    def test_list_company_with_staff(self):
+        CompanyFactory(created_by=self.staff)
+        CompanyFactory.create_batch(3)
+
+        response = self.staff_client.get(
+            self.main_api
+        )
+        self.assertEqual(response.status_code, 200)
+        response = response.json()
+        self.assertEqual(response.get('count'), 4)
+
+    def test_retrieve_company_with_staff(self):
+        pass
+
+    def test_retrieve_company_with_unauthorized_client(self):
+        pass
+
+    def test_retrieve_company_with_client(self):
+        pass
+
+    def test_retrieve_another_company_information(self):
+        pass
