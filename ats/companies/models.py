@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.utils.text import slugify
+
 from ats.users.models import User
 
 
@@ -12,8 +14,10 @@ class CompanyStaff(User):
 
 
 class Company(models.Model):
-    created_by = models.ForeignKey('CompanyStaff', related_name='companies', on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey('CompanyStaff', related_name='companies',
+                                   on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=128)
+    slug = models.SlugField(null=True)
     description = models.TextField()
     avatar = models.ImageField(upload_to="companies", null=True, blank=True)
     email = models.EmailField(unique=True)
@@ -25,3 +29,7 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self):
+        self.slug = slugify(self.name)
+        return super().save()
