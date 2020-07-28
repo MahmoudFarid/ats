@@ -43,8 +43,10 @@ class TestCompanyAPIViewSet(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Company.objects.count(), 1)
         company = Company.objects.last()
-        #TODO: continue with checking
         self.assertEqual(company.created_by, self.staff)
+        self.assertEqual(company.website, "https://test.com")
+        self.assertEqual(company.description, "Description")
+        self.assertEqual(company.name, "Company")
 
     def test_create_company_unauthorized_client(self):
         self.assertEqual(Company.objects.count(), 0)
@@ -56,7 +58,6 @@ class TestCompanyAPIViewSet(APITestCase):
         )
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Company.objects.count(), 0)
-        company = Company.objects.last()
 
     def test_create_company_with_client(self):
         self.assertEqual(Company.objects.count(), 0)
@@ -69,3 +70,23 @@ class TestCompanyAPIViewSet(APITestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Company.objects.count(), 0)
         company = Company.objects.last()
+
+    def test_update_company_with_staff(self):
+        response = self.staff_client.post(
+            self.main_api,
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        company = Company.objects.last()
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Company.objects.count(), 1)
+
+        response = self.staff_client.put(
+            '{}{}'.format(self.main_api, company.id),
+            data={"name": "Nana"},
+            format='json'
+        )
+        company = Company.objects.get(id=company.id)
+
+        self.assertEqual(company.name, 'Nana')
