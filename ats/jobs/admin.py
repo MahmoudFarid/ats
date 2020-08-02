@@ -4,14 +4,14 @@ from .models import Category, Job
 
 
 def make_active(self, request, queryset):
-    queryset.update(status=2)
+    queryset.update(status=Job.STATUS.ACTIVE)
 
 
 make_active.short_description = "Mark selected jobs as an active"
 
 
 def make_draft(self, request, queryset):
-    queryset.update(status=1)
+    queryset.update(status=Job.STATUS.DRAFT)
 
 
 make_draft.short_description = "Mark selected jobs as a darft"
@@ -35,5 +35,5 @@ class JobAdmin(admin.ModelAdmin):
     list_select_related = ('company', 'category')
     radio_fields = {"status": admin.VERTICAL}
     sortable_by = ('id')
-    list_per_page = 1
+    list_per_page = 10
 

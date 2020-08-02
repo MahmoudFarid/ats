@@ -8,7 +8,7 @@ class JobApplicationAdmin(admin.ModelAdmin):
     list_display = ('id', 'job', 'user', 'status', 'cv_url')
     list_display_links = ('job', 'user', 'cv_url')
     list_filter = (
-        ('user', admin.RelatedFieldListFilter),
+        ('user', admin.RelatedOnlyFieldListFilter),
         ('job', admin.RelatedOnlyFieldListFilter),
         'status',
     )
