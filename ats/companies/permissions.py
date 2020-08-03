@@ -10,7 +10,6 @@ class BasicPermission:
 
 
 class IsCompanyStaffPermission(permissions.BasePermission, BasicPermission):
-
     def has_permission(self, request, view):
         allowed_methods = self.get_allowed_methods(view)
         if request.method in allowed_methods:
