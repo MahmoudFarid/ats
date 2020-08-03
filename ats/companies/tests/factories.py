@@ -3,7 +3,13 @@ import factory
 
 from ats.users.tests.factories import UserFactory
 
-from ..models import Company, CompanyStaff
+from ..models import Company, CompanyStaff, CompanyAdmin
+
+
+class CompanyAdminFactory(UserFactory):
+
+    class Meta:
+        model = CompanyAdmin
 
 
 class CompanyStaffFactory(UserFactory):
