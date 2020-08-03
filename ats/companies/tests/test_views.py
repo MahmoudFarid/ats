@@ -46,6 +46,9 @@ class TestCompanyAPIViewSet(APITestCase):
         company = Company.objects.last()
         # #TODO: continue with checking response
         self.assertEqual(company.created_by, self.staff)
+        self.assertEqual(company.website, "https://test.com")
+        self.assertEqual(company.description, "Description")
+        self.assertEqual(company.name, "test")
 
     def test_create_company_with_unauthorized_client(self):
         self.assertEqual(Company.objects.count(), 0)
@@ -57,7 +60,6 @@ class TestCompanyAPIViewSet(APITestCase):
         )
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Company.objects.count(), 0)
-        company = Company.objects.last()
 
     def test_create_company_with_client(self):
         self.assertEqual(Company.objects.count(), 0)
@@ -81,7 +83,21 @@ class TestCompanyAPIViewSet(APITestCase):
         # import ipdb ; ipdb.set_trace()
 
     def test_create_company_with_same_data_twice(self):
-        pass
+        self.assertEqual(Company.objects.count(), 0)
+
+        response = self.staff_client.post(
+            self.main_api,
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(Company.objects.count(), 1)
+
+        response = self.staff_client.post(
+            self.main_api,
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
 
     def test_update_company_with_staff(self):
         company = CompanyFactory(created_by=self.staff)
@@ -95,10 +111,22 @@ class TestCompanyAPIViewSet(APITestCase):
         self.assertEqual(response.get('name'), self.data.get('name'))
 
     def test_update_company_with_unauthorized_client(self):
-        pass
+        company = CompanyFactory()
+        response = self.unauthorized_client.put(
+            self.obj_api.format(company.id),
+            data=json.dumps(self.data),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 403)
 
     def test_update_company_with_client(self):
-        pass
+        company = CompanyFactory()
+        response = self.client.put(
+            self.obj_api.format(company.id),
+            data=json.dumps(self.data),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 403)
 
     def test_update_another_company_information(self):
         company = CompanyFactory()
@@ -110,16 +138,40 @@ class TestCompanyAPIViewSet(APITestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_partial_update_company_with_staff(self):
-        pass
+        company = CompanyFactory(created_by=self.staff)
+        response = self.staff_client.patch(
+            self.obj_api.format(company.id),
+            data=json.dumps({"name": "partial"}),
+            content_type='application/json',
+        )
+        self.assertEqual(response.json().get('name'), "partial")
 
     def test_partial_update_company_with_unauthorized_client(self):
-        pass
+        company = CompanyFactory()
+        response = self.unauthorized_client.patch(
+            self.obj_api.format(company.id),
+            data=json.dumps({"name": "partial"}),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 403)
 
     def test_partial_update_company_with_client(self):
-        pass
+        company = CompanyFactory()
+        response = self.client.patch(
+            self.obj_api.format(company.id),
+            data=json.dumps({"name": "partial"}),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 403)
 
     def test_partial_update_another_company_information(self):
-        pass
+        company = CompanyFactory()
+        response = self.staff_client.patch(
+            self.obj_api.format(company.id),
+            data=json.dumps({"name": "testing partial name"}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 403)
 
     def test_list_companies_with_client(self):
         CompanyFactory.create_batch(5)
@@ -132,7 +184,11 @@ class TestCompanyAPIViewSet(APITestCase):
         self.assertEqual(response.get('count'), 5)
 
     def test_list_companies_with_unauthorized_client(self):
-        pass
+        CompanyFactory.create_batch(3)
+        response = self.unauthorized_client.get(
+            self.main_api
+        )
+        self.assertEqual(response.json().get('count'), 3)
 
     def test_list_company_with_staff(self):
         CompanyFactory(created_by=self.staff)
@@ -146,13 +202,17 @@ class TestCompanyAPIViewSet(APITestCase):
         self.assertEqual(response.get('count'), 4)
 
     def test_retrieve_company_with_staff(self):
-        pass
+        company = CompanyFactory()
+        response = self.staff_client.get(
+            self.obj_api.format(company.id),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('id'), company.id)
 
     def test_retrieve_company_with_unauthorized_client(self):
-        pass
-
-    def test_retrieve_company_with_client(self):
-        pass
-
-    def test_retrieve_another_company_information(self):
-        pass
+        company = CompanyFactory()
+        response = self.staff_client.get(
+            self.obj_api.format(company.id),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json().get('id'), company.id)

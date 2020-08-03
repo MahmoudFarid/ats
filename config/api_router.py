@@ -14,5 +14,7 @@ router.register("users", UserViewSet)
 
 app_name = "api"
 urlpatterns = [
-    path('companies/', include('ats.companies.routers'))
+    path('companies/', include('ats.companies.routers')),
+    path('applications/', include('ats.job_applications.routers')),
+    path('jobs/', include('ats.jobs.routers')),
 ] + router.urls
