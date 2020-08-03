@@ -13,7 +13,7 @@ from .serializers import CompanySerializer, ListCompanySerializer
 
 class CompaniesViewSet(ModelViewSet):
     queryset = Company.objects.all()
-    permission_classes = [IsAuthenticated, IsCompanyStaffPermission, CompanyOwnerRequired]
+    permission_classes = [IsCompanyStaffPermission, CompanyOwnerRequired]
 
     allowed_methods = ['POST', 'PUT', 'PATCH', 'DELETE']
 
