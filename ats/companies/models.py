@@ -22,6 +22,7 @@ class Company(models.Model):
     avatar = models.ImageField(upload_to="companies", null=True, blank=True)
     email = models.EmailField(unique=True)
     website = models.URLField(unique=True)
+    no_employees = models.IntegerField()
 
     class Meta:
         verbose_name = "Company"
