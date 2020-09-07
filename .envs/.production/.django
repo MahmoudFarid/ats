@@ -1,0 +1,52 @@
+# General
+# ------------------------------------------------------------------------------
+# DJANGO_READ_DOT_ENV_FILE=True
+DJANGO_SETTINGS_MODULE=config.settings.production
+DJANGO_SECRET_KEY=QOL8bOYL7qJB1trEzUA0JXuGa9CA81Tfz2etTfiWJskty2TzCXu9DYRyYhaxwRke
+DJANGO_ADMIN_URL=EmC6BVsCvxZkbk7wwKoypUqp6fBPZ5eC/
+DJANGO_ALLOWED_HOSTS=46.101.101.175,46.101.165.222,46.101.101.175
+
+# Security
+# ------------------------------------------------------------------------------
+# TIP: better off using DNS, however, redirect is OK too
+DJANGO_SECURE_SSL_REDIRECT=False
+
+# Email
+# ------------------------------------------------------------------------------
+# DJANGO_SERVER_EMAIL=
+
+# SENDGRID_API_KEY=
+SENDGRID_GENERATE_MESSAGE_ID=True
+SENDGRID_MERGE_FIELD_FORMAT=None
+
+
+# AWS
+# ------------------------------------------------------------------------------
+DJANGO_AWS_ACCESS_KEY_ID=AKIAXPDWZ5PFKUCUKC6Y
+DJANGO_AWS_SECRET_ACCESS_KEY=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
+DJANGO_AWS_STORAGE_BUCKET_NAME=ats-project
+
+# django-allauth
+# ------------------------------------------------------------------------------
+DJANGO_ACCOUNT_ALLOW_REGISTRATION=True
+
+# Gunicorn
+# ------------------------------------------------------------------------------
+WEB_CONCURRENCY=4
+
+# Sentry
+# ------------------------------------------------------------------------------
+SENTRY_DSN=https://87d149266f5c4b48ab13e0b54be13d51@o126789.ingest.sentry.io/5420556
+
+
+# Redis
+# ------------------------------------------------------------------------------
+REDIS_URL=redis://redis:6379/0
+
+# Celery
+# ------------------------------------------------------------------------------
+
+# Flower
+CELERY_FLOWER_USER=debug
+CELERY_FLOWER_PASSWORD=debug
+
