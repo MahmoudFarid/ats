@@ -1,0 +1,45 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [ deployment ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-Credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build images
+      run: docker-compose -f production.yml build
+
+    - name: Push image to Amazon ECR
+      run: docker-compose -f production.yml push
+
+    - name: Deploy to swarm
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd ats
+          aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 513497754570.dkr.ecr.us-east-1.amazonaws.com
+          docker stack deploy --with-registry-auth -c production.yml ats
+        host: ${{ secrets.REMOTE_HOST }}
+        user: ${{ secrets.REMOTE_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY}}
+
+    - name: Logout of Amazon ECR
+      if: always()
+      run: docker logout ${{ steps.login-ecr.outputs.registry }}
