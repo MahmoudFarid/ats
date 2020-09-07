@@ -34,7 +34,8 @@ jobs:
       with:
         command: |
           cd ats
-          aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 513497754570.dkr.ecr.us-east-1.amazonaws.com
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 513497754570.dkr.ecr.us-east-1.amazonaws.com
+          git checkout deployment
           docker stack deploy --with-registry-auth -c production.yml ats
         host: ${{ secrets.REMOTE_HOST }}
         user: ${{ secrets.REMOTE_USER }}
