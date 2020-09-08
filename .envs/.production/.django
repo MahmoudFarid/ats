@@ -3,8 +3,8 @@
 # DJANGO_READ_DOT_ENV_FILE=True
 DJANGO_SETTINGS_MODULE=config.settings.production
 DJANGO_SECRET_KEY=QOL8bOYL7qJB1trEzUA0JXuGa9CA81Tfz2etTfiWJskty2TzCXu9DYRyYhaxwRke
-DJANGO_ADMIN_URL=EmC6BVsCvxZkbk7wwKoypUqp6fBPZ5eC/
-DJANGO_ALLOWED_HOSTS=46.101.101.175,46.101.165.222,46.101.101.175
+DJANGO_ADMIN_URL=admin/
+DJANGO_ALLOWED_HOSTS=46.101.101.175,207.154.195.71
 
 # Security
 # ------------------------------------------------------------------------------

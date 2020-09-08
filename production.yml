@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 volumes:
   production_postgres_data: {}
@@ -17,6 +17,12 @@ services:
       - ./.envs/.production/.django
       - ./.envs/.production/.postgres
     command: /start
+    deploy:
+      replicas: 3
+      # placement:
+      #   constraints:
+      #     - node.role == worker
+          # - node.labels.postgres == True
 
   postgres:
     build:
