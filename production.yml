@@ -9,7 +9,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
-    image: 513497754570.dkr.ecr.us-east-1.amazonaws.com/django:bleed
+    image: 513497754570.dkr.ecr.eu-central-1.amazonaws.com/web/django
     depends_on:
       - postgres
       - redis
@@ -22,7 +22,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: 513497754570.dkr.ecr.us-east-1.amazonaws.com/postgres:bleed
+    image: 513497754570.dkr.ecr.eu-central-1.amazonaws.com/web/postgres
     volumes:
       - production_postgres_data:/var/lib/postgresql/data
       - production_postgres_data_backups:/backups
@@ -31,7 +31,7 @@ services:
 
   nginx:
     build: ./compose/production/nginx
-    image: 513497754570.dkr.ecr.us-east-1.amazonaws.com/nginx:bleed
+    image: 513497754570.dkr.ecr.eu-central-1.amazonaws.com/web/nginx
     depends_on:
       - django
     ports:
