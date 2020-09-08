@@ -54,3 +54,6 @@ test_local:
 
 stagingup:
 	docker-compose -f staging.yml up -d --build
+
+aws-login:
+	$(shell aws ecr get-login --profile ats --no-include-email --region eu-central-1)

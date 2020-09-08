@@ -18,11 +18,10 @@ services:
       - ./.envs/.production/.postgres
     command: /start
     deploy:
-      replicas: 3
-      # placement:
-      #   constraints:
-      #     - node.role == worker
-          # - node.labels.postgres == True
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
 
   postgres:
     build:
@@ -34,6 +33,11 @@ services:
       - production_postgres_data_backups:/backups
     env_file:
       - ./.envs/.production/.postgres
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.postgres == True
 
   nginx:
     build: ./compose/production/nginx
